@@ -3,7 +3,7 @@ set -euo pipefail
 
 REPO_ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 WORK_DIR="$REPO_ROOT"
-UPSTREAM_DIR="$REPO_ROOT/source"
+UPSTREAM_DIR="$REPO_ROOT/source/_upstream"
 FINAL_DIR="$REPO_ROOT/final_builds"
 ANDROID_NDK_HOME=${ANDROID_NDK_HOME:-${ANDROID_NDK:-}}
 API_LEVEL=${API_LEVEL:-26}
@@ -29,12 +29,12 @@ clone_or_update() {
   mkdir -p "$UPSTREAM_DIR"
   if [[ ! -d "$UPSTREAM_DIR/tun2socks/.git" ]]; then
     rm -rf "$UPSTREAM_DIR/tun2socks"
-    git clone https://github.com/eycorsican/go-tun2socks.git "$UPSTREAM_DIR/tun2socks"
+    git clone https://github.com/eycorsican/go-tun2socks.git "$UPSTREAM_DIR/go-tun2socks"
   else
     (cd "$UPSTREAM_DIR/tun2socks" && git fetch --all && git reset --hard origin/master || git reset --hard origin/main)
   fi
   # Vendorize LWIP workspace (we keep our wrapper in working_directory/tun2socks_lwip)
-  rsync -a --delete --exclude ".git" "$UPSTREAM_DIR/tun2socks/" "$WORK_DIR/go-tun2socks/"
+  rsync -a --delete --exclude ".git" "$UPSTREAM_DIR/go-tun2socks/" "$REPO_ROOT/source/go-tun2socks/"
 }
 
 build_android() {
