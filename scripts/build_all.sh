@@ -27,13 +27,13 @@ fi
 
 clone_or_update() {
   mkdir -p "$UPSTREAM_DIR"
-  if [[ ! -d "$UPSTREAM_DIR/tun2socks/.git" ]]; then
-    rm -rf "$UPSTREAM_DIR/tun2socks"
+  if [[ ! -d "$UPSTREAM_DIR/go-tun2socks/.git" ]]; then
+    rm -rf "$UPSTREAM_DIR/go-tun2socks"
     git clone https://github.com/eycorsican/go-tun2socks.git "$UPSTREAM_DIR/go-tun2socks"
   else
-    (cd "$UPSTREAM_DIR/tun2socks" && git fetch --all && git reset --hard origin/master || git reset --hard origin/main)
+    (cd "$UPSTREAM_DIR/go-tun2socks" && git fetch --all && git reset --hard origin/master || git reset --hard origin/main)
   fi
-  # Vendorize LWIP workspace (we keep our wrapper in working_directory/tun2socks_lwip)
+  # Vendorize upstream (no .git)
   rsync -a --delete --exclude ".git" "$UPSTREAM_DIR/go-tun2socks/" "$REPO_ROOT/source/go-tun2socks/"
 }
 
